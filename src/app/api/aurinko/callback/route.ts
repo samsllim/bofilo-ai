@@ -1,5 +1,5 @@
 import { getAccountDetails, getAurinkoToken } from "@/lib/aurinko";
-// import { waitUntil } from '@vercel/functions'
+import { waitUntil } from '@vercel/functions'
 import { db } from "@/server/db";
 import { auth } from "@clerk/nextjs/server";
 import axios from "axios";
@@ -31,13 +31,13 @@ export const GET = async (req: NextRequest) => {
             token: token.accessToken,
         }
     })
-    // waitUntil(
-    //     axios.post(`${process.env.NEXT_PUBLIC_URL}/api/initial-sync`, { accountId: token.accountId.toString(), userId }).then((res) => {
-    //         console.log(res.data)
-    //     }).catch((err) => {
-    //         console.log(err.response.data)
-    //     })
-    // )
+    waitUntil(
+        axios.post(`${process.env.NEXT_PUBLIC_URL}/api/initial-sync`, { accountId: token.accountId.toString(), userId }).then((res) => {
+            // console.log(res.data)
+        }).catch((err) => {
+            console.log(err.response.data)
+        })
+    )
 
     return NextResponse.redirect(new URL('/mail', req.url))
 }
