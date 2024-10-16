@@ -4,6 +4,8 @@ const isPublicRoute = createRouteMatcher([
     '/sign-in(.*)', 
     '/sign-up(.*)',
     '/api/clerk(.*)',
+    '/api/webhooks(.*)',
+    '/api/aurinko/webhook(.*)',
     '/api/initial-sync(.*)'
 ])
 

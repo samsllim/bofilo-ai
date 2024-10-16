@@ -52,6 +52,9 @@ export const mailRouter = createTRPCRouter({
         tab: z.string()
     })).query(async ({ ctx, input }) => {
         const account = await authoriseAccountAccess(input.accountId, ctx.auth.userId)
+        const acc = new Account(account.token)
+        acc.syncEmails().catch(console.error)
+
         let filter: Prisma.ThreadWhereInput = {}
         if (input.tab === "inbox") {
             filter = inboxFilter(account.id)
