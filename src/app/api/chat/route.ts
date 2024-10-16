@@ -19,15 +19,66 @@ export async function POST(req: Request) {
         if (!userId) {
             return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
         }
-        
-        const { messages, accountId } = await req.json();
-        const oramaManager = new OramaManager(accountId)
-        await oramaManager.initialize()
 
+        const { messages, accountId } = await req.json();
         const lastMessage = messages[messages.length - 1]
 
+        const extractKeyword = async (lastMessage: string): Promise<string> => {
+            try {
+                const response = await openai.createChatCompletion({
+                    model: "gpt-4o-mini",
+                    messages: [
+                    {
+                        role: "system",
+                        content: "You are an AI assistant specialized in extracting keywords from messages. Your task is to identify and extract the most relevant words that capture the core intent or subject of the given message. Provide only the extracted keyword without any additional explanation or formatting."
+                    },
+                    {
+                        role: "user",
+                        content: `
+                            You are tasked with extracting the keyword text from a given message. This keyword will be used for vector search engine search. Your goal is to identify and extract the most relevant words or phrases that capture the core intent or subject of the message.
 
-        const context = await oramaManager.vectorSearch({ prompt: lastMessage.content })
+                            Here is the message:
+                            <message>
+                            ${lastMessage}
+                            </message>
+
+                            To extract the keyword:
+                            1. Identify the main topic or action requested in the message.
+                            2. Focus on nouns, verbs, and time-related phrases that are central to the request.
+                            3. Exclude general conversational elements (e.g., greetings, "can you help me").
+
+                            Your response should be just the extracted keyword or phrase, without any additional explanation or formatting.
+
+                            For example:
+                            If the message is "Hi, can you help me summarize my emails for the past 3 days?"
+                            The extracted keyword would be: emails
+
+                            Now, please extract the keyword from the given message and provide it as a simple string output.
+                        `
+                    }
+                    ],
+                    temperature: 0.3,
+                    max_tokens: 60
+                })
+            
+                if (!response.ok) {
+                    throw new Error(`OpenAI API error: ${response.statusText}`)
+                }
+            
+                const data = await response.json()
+                return data.choices[0].message.content.trim()
+            } catch (error) {
+                console.error("Error in extractKeyword:", error)
+                throw error
+            }
+        }
+        
+        const oramaManager = new OramaManager(accountId)
+        await oramaManager.initialize()
+        const keyword = await extractKeyword(lastMessage.content)
+        console.log(`Keyword extracted: ${keyword}`)
+
+        const context = await oramaManager.vectorSearch({ prompt: keyword })
         console.log(context.hits.length + ' hits found')
         // console.log(context.hits.map(hit => hit.document))
 

@@ -25,18 +25,18 @@ const ComposeButton = () => {
 
 
     React.useEffect(() => {
-        const handleKeyDown = (event: KeyboardEvent) => {
-            if (event.key === 'c' && (event.ctrlKey || event.metaKey) && !['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement?.tagName || '')) {
-                event.preventDefault();
-                setOpen(true);
-            }
-        };
+        // const handleKeyDown = (event: KeyboardEvent) => {
+        //     if (event.key === 'c' && (event.ctrlKey || event.metaKey) && !['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement?.tagName || '')) {
+        //         event.preventDefault();
+        //         setOpen(true);
+        //     }
+        // };
 
-        window.addEventListener('keydown', handleKeyDown);
+        // window.addEventListener('keydown', handleKeyDown);
 
-        return () => {
-            window.removeEventListener('keydown', handleKeyDown);
-        };
+        // return () => {
+        //     window.removeEventListener('keydown', handleKeyDown);
+        // };
     }, []);
 
     const sendEmail = api.mail.sendEmail.useMutation()

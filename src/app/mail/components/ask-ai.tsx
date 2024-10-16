@@ -120,8 +120,7 @@ const AskAI = ({ isCollapsed }: { isCollapsed: boolean }) => {
                         </motion.div>
                         <button
                             type="submit"
-                            className="ml-2 flex h-9 w-9 items-center justify-center rounded-full bg-gray-200
-            dark:bg-gray-800"
+                            className="ml-2 flex h-9 w-9 items-center justify-center rounded-full bg-gray-200 dark:bg-gray-800"
                         >
                             <Send className="size-4 text-gray-500 dark:text-gray-300" />
                         </button>
