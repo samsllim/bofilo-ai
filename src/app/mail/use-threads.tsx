@@ -12,7 +12,7 @@ const useThreads = () => {
         accountId,
         done,
         tab
-    }, { enabled: !!accountId && !!tab, placeholderData: (e) => e, refetchInterval: 1000 * 5 })
+    }, { enabled: !!accountId && !!tab, placeholderData: (e) => e})
 
     return {
         threads,

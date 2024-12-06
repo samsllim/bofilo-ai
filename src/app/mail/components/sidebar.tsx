@@ -24,21 +24,25 @@ const SideBar = ({ isCollapsed }: Props) => {
     const [tab] = useLocalStorage("normalhuman-tab", "inbox")
     const [accountId] = useLocalStorage("accountId", "")
 
-    const refetchInterval = 8000
-    const { data: inboxThreads } = api.mail.getNumThreads.useQuery({
-        accountId,
-        tab: "inbox"
-    }, { enabled: !!accountId && !!tab, refetchInterval })
+    // const refetchInterval = 8000
+    // const { data: inboxThreads } = api.mail.getNumThreads.useQuery({
+    //     accountId,
+    //     tab: "inbox"
+    // }, { enabled: !!accountId && !!tab, refetchInterval })
 
-    const { data: draftsThreads } = api.mail.getNumThreads.useQuery({
-        accountId,
-        tab: "drafts"
-    }, { enabled: !!accountId && !!tab, refetchInterval })
+    // const { data: draftsThreads } = api.mail.getNumThreads.useQuery({
+    //     accountId,
+    //     tab: "drafts"
+    // }, { enabled: !!accountId && !!tab, refetchInterval })
 
-    const { data: sentThreads } = api.mail.getNumThreads.useQuery({
-        accountId,
-        tab: "sent"
-    }, { enabled: !!accountId && !!tab, refetchInterval })
+    // const { data: sentThreads } = api.mail.getNumThreads.useQuery({
+    //     accountId,
+    //     tab: "sent"
+    // }, { enabled: !!accountId && !!tab, refetchInterval })
+
+    let inboxThreads = 0;
+    let draftsThreads = 0;
+    let sentThreads = 0;
 
     return (
         <>

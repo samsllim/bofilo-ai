@@ -11,7 +11,7 @@ const ReplyBox = () => {
     const [threadId] = useThread()
     const { accountId } = useThreads()
     const { data: replyDetails } = api.mail.getReplyDetails.useQuery({
-        accountId: accountId,
+        accountId: '73686',
         threadId: threadId || '',
         replyType: 'reply'
     })

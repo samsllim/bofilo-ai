@@ -54,7 +54,7 @@ const useVim = () => {
             return previousData
         },
         onSettled: () => {
-            refetch()
+            // refetch()
         }
     })
 
@@ -88,7 +88,7 @@ const useVim = () => {
             return previousData
         },
         onSettled: () => {
-            refetch()
+            // refetch()
         }
     })
 

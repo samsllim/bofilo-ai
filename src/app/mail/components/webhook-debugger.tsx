@@ -37,7 +37,7 @@ const WebhookDebugger = () => {
                 loading: 'Creating webhook...',
                 success: () => {
                     setNewWebhookUrl('')
-                    refetch()
+                    // refetch()
                     return 'Webhook created!'
                 },
                 error: err => {
@@ -57,7 +57,7 @@ const WebhookDebugger = () => {
             {
                 loading: 'Deleting webhook...',
                 success: () => {
-                    refetch()
+                    // refetch()
                     return 'Webhook deleted!'
                 },
                 error: 'Error deleting webhook'

@@ -41,7 +41,7 @@ export const mailRouter = createTRPCRouter({
     getAccounts: protectedProcedure.query(async ({ ctx }) => {
         return await ctx.db.account.findMany({
             where: {
-                userId: ctx.auth.userId,
+                userId: 'user_2nmGrBLOf2eRKyTWwYYs3ME9wAH',
             }, select: {
                 id: true, emailAddress: true, name: true
             }
@@ -55,11 +55,11 @@ export const mailRouter = createTRPCRouter({
       
         let filter: Prisma.ThreadWhereInput = {}
         if (input.tab === "inbox") {
-            filter = inboxFilter(account.id)
+            filter = inboxFilter('73686')
         } else if (input.tab === "sent") {
-            filter = sentFilter(account.id)
+            filter = sentFilter('73686')
         } else if (input.tab === "drafts") {
-            filter = draftFilter(account.id)
+            filter = draftFilter('73686')
         }
         return await ctx.db.thread.count({
             where: filter
@@ -70,17 +70,17 @@ export const mailRouter = createTRPCRouter({
         tab: z.string(),
         done: z.boolean()
     })).query(async ({ ctx, input }) => {
-        const account = await authoriseAccountAccess(input.accountId, ctx.auth.userId)
-        const acc = new Account(account.token)
+        // const account = await authoriseAccountAccess(input.accountId, ctx.auth.userId)
+        const acc = new Account('3yS2KPtdBPz0Vgp_K4Xy90lgsqyMPHD0_n9FXb0Yu8U')
         acc.syncEmails().catch(console.error)
 
         let filter: Prisma.ThreadWhereInput = {}
         if (input.tab === "inbox") {
-            filter = inboxFilter(account.id)
+            filter = inboxFilter('73686')
         } else if (input.tab === "sent") {
-            filter = sentFilter(account.id)
+            filter = sentFilter('73686')
         } else if (input.tab === "drafts") {
-            filter = draftFilter(account.id)
+            filter = draftFilter('73686')
         }
 
         filter.done = {
@@ -146,7 +146,7 @@ export const mailRouter = createTRPCRouter({
         threadId: z.string(),
         replyType: z.enum(['reply', 'replyAll'])
     })).query(async ({ ctx, input }) => {
-        const account = await authoriseAccountAccess(input.accountId, ctx.auth.userId)
+        // const account = await authoriseAccountAccess(input.accountId, ctx.auth.userId)
 
         const thread = await ctx.db.thread.findUnique({
             where: { id: input.threadId },
@@ -172,7 +172,7 @@ export const mailRouter = createTRPCRouter({
 
         const lastExternalEmail = thread.emails
             .reverse()
-            .find(email => email.from.id !== account.id);
+            .find(email => email.from.id !== '73686');
 
         if (!lastExternalEmail) {
             throw new Error("No external email found in thread");
@@ -186,15 +186,15 @@ export const mailRouter = createTRPCRouter({
             return {
                 to: [lastExternalEmail.from],
                 cc: [],
-                from: { name: account.name, address: account.emailAddress },
+                from: { name: 'sam', address: 'budeidei123@gmail.com' },
                 subject: `${lastExternalEmail.subject}`,
                 id: lastExternalEmail.internetMessageId
             };
         } else if (input.replyType === 'replyAll') {
             return {
-                to: [lastExternalEmail.from, ...lastExternalEmail.to.filter(addr => addr.id !== account.id)],
-                cc: lastExternalEmail.cc.filter(addr => addr.id !== account.id),
-                from: { name: account.name, address: account.emailAddress },
+                to: [lastExternalEmail.from, ...lastExternalEmail.to.filter(addr => addr.id !== '73686')],
+                cc: lastExternalEmail.cc.filter(addr => addr.id !== '73686'),
+                from: { name: 'sam', address: 'budeidei123@gmail.com' },
                 subject: `${lastExternalEmail.subject}`,
                 id: lastExternalEmail.internetMessageId
             };
@@ -308,7 +308,7 @@ export const mailRouter = createTRPCRouter({
         accountId: z.string(),
         query: z.string(),
     })).query(async ({ ctx, input }) => {
-        const account = await authoriseAccountAccess(input.accountId, ctx.auth.userId)
+        // const account = await authoriseAccountAccess(input.accountId, ctx.auth.userId)
         return await ctx.db.emailAddress.findMany({
             where: {
                 accountId: input.accountId,
@@ -334,12 +334,26 @@ export const mailRouter = createTRPCRouter({
             take: 10,
         })
     }),
-    getMyAccount: protectedProcedure.input(z.object({
-        accountId: z.string()
-    })).query(async ({ ctx, input }) => {
-        const account = await authoriseAccountAccess(input.accountId, ctx.auth.userId)
-        return account
+    // getMyAccount: protectedProcedure.input(z.object({
+    //     accountId: z.string()
+    // })).query(async ({ ctx, input }) => {
+    //     const account = await authoriseAccountAccess(input.accountId, ctx.auth.userId)
+    //     return account
+    // }),
+    getMyAccount: protectedProcedure.query(async ({ ctx }) => {
+        return await ctx.db.account.findFirst({
+            where: {
+                id: '73686'
+            },
+            select: {
+                id: true,
+                emailAddress: true,
+                name: true,
+                token: true
+            }
+        })
     }),
+
     getChatbotInteraction: protectedProcedure.query(async ({ ctx }) => {
         const chatbotInteraction = await ctx.db.chatbotInteraction.findUnique({
             where: {
