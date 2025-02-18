@@ -1,3 +1,4 @@
+import Script from "next/script";
 import "@/styles/globals.css";
 
 import { GeistSans } from "geist/font/sans";
